@@ -68,7 +68,7 @@ proc out_fmt[T](record: T, fmt_field: FormatField, zip: bool, samples: seq[strin
 proc `$`*(f:FileStream): string {.inline.} =
     echo "<filestream>"
 
-proc to_json*(vcf: string, region_list: seq[string], sample_set: string, info: string, format: string, zip: bool, annotation: bool, pretty: bool, array: bool, pass: bool) =
+proc to_json*(vcf: string, region_list: seq[string], sample_set: string, info: string, format: string, zip: bool, annotation: bool, pretty: bool, array: var bool, pass: bool, header: bool) =
     var v:VCF
 
     ## Format Fields
@@ -101,6 +101,14 @@ proc to_json*(vcf: string, region_list: seq[string], sample_set: string, info: s
         let samples_keep = filterIt(sample_set.split({',', ' '}), it.len > 0)
         set_samples(v, samples_keep)
     var samples = v.samples
+
+    if header:
+        array = true
+        echo "{\"header\": "
+        var j_header = newJObject()
+        j_header.add("samples", %* samples)
+        echo j_header, ","
+        echo "\"variants\": "
 
     if array:
         echo "["
@@ -222,3 +230,5 @@ proc to_json*(vcf: string, region_list: seq[string], sample_set: string, info: s
             stdout.write "\n"
     if array:
         echo "\n]"
+    if header:
+        echo "}"

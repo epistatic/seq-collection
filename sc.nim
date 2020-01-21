@@ -87,10 +87,11 @@ var p = newParser("sc"):
         flag("-a", "--array", help="Output as a JSON array instead of individual JSON lines")
         flag("-z", "--zip", help="Zip sample names with FORMAT fields (e.g. {'sample1': 25, 'sample2': 34})")
         flag("-n", "--annotation", help="Parse ANN Fields")
+        flag("-H", "--header", help="Add a header object to output (implies --array)")
         flag("--pass", help="Only output variants where FILTER=PASS")
         flag("--debug", help="Debug")
         run:
-            to_json(get_vcf(opts.vcf), opts.region, opts.samples, opts.info, opts.format, opts.zip, opts.annotation, opts.pretty, opts.array, opts.pass)
+            to_json(get_vcf(opts.vcf), opts.region, opts.samples, opts.info, opts.format, opts.zip, opts.annotation, opts.pretty, opts.array, opts.pass, opts.header)
     
     command("insert-size", group="BAM"):
         help("Calculate insert-size metrics")

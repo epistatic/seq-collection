@@ -44,8 +44,8 @@ assert_equal 0 "$(cat $STDOUT_FILE | jq '.FORMAT.GT[0][0]')"
 # CONVERT MISSING VALUES TO NULL
 run missing_float_to_null sc json -f PL "${PARENT_DIR}/tests/data/test.vcf.gz" X:17276844-17276844 
 assert_equal "null" "$(cat $STDOUT_FILE | jq -c '.FORMAT.PL[0]')"
-run missing_floats_to_null sc json -f PL "${PARENT_DIR}/tests/data/test.vcf.gz" X:17276844-17276844 
-assert_equal "[null,null]" "$(cat $STDOUT_FILE | jq -c '.FORMAT.PL[0:2]')"
+run missing_floats_to_null sc json -f PL "${PARENT_DIR}/tests/data/test.vcf.gz" I:1741810-1741810 
+assert_equal "[null,null]" "$(cat $STDOUT_FILE | jq -c '.FORMAT.PL[0][0:2]')"
 
 #BCSQ
 run bcsq_gene sc json -i BCSQ -n "${PARENT_DIR}/tests/data/test.bcsq.vcf.gz" chr22:40679539-40679539 
